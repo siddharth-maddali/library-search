@@ -1,0 +1,85 @@
+# Scientific Library Search
+
+## Changelog
+
+- **2026-02-04**: 
+    - Enhanced filename parsing to robustly extract publication years (1700-2099) and editions (e.g., "2nd Ed") from filenames.
+    - Updated Search UI to support filtering by year (`year:1948`) and displaying edition information.
+    - Cleaned up source indicator files and reorganized auxiliary maintenance scripts.
+- **2026-01-27**: 
+    - Initial release.
+    - Implemented Wikipedia-enhanced indexing: tokenizes filenames and expands technical terms using Wikipedia summaries.
+    - Added incremental indexing with caching and parallel processing support.
+    - Added Docker support for easy deployment (optimized for Raspberry Pi 4).
+
+## Abstract
+
+**Scientific Library Search** is a lightweight, self-hosted search engine designed for personal document collections. Unlike traditional full-text search engines that require resource-intensive OCR, this project leverages smart filename parsing and **Wikipedia expansion**.
+
+It extracts metadata (Author, Title, Year, Edition) from filenames and uses a local glossary to identify technical terms. It then queries Wikipedia for these terms to fetch related keywords, creating a rich search index without reading the file contents. This makes it extremely fast and robust, especially for older scientific papers or scanned books with poor text layers.
+
+Supported formats: PDF, DJVU, EPUB, MOBI.
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.9+
+- pip
+
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
+
+2.  Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### Usage
+
+#### 1. Indexing Your Library
+
+To build the search index (`library.json`), run:
+
+```bash
+make index
+```
+
+This will scan the current directory (and subdirectories) for supported files.
+- Use `--cores N` to run in parallel (e.g., `python3 incremental_indexer.py --cores 4`).
+- Use `--full` to enable Wikipedia expansion (requires internet connection).
+
+#### 2. Running the Server
+
+Start the web interface:
+
+```bash
+make server
+```
+
+The UI will be available at `http://localhost:5000`.
+
+### Docker Setup
+
+You can run the entire stack using Docker, which is recommended for deployment (e.g., on a Raspberry Pi).
+
+1.  **Build the image:**
+    ```bash
+    docker build -t library-search .
+    ```
+
+2.  **Run the Indexer:**
+    Mount your current directory (`$(pwd)`) to `/app` so the container can see your files and write the `library.json` back to your host.
+    ```bash
+    docker run -v $(pwd):/app library-search index --cores 4
+    ```
+
+3.  **Run the Server:**
+    ```bash
+    docker run -p 5000:5000 -v $(pwd):/app library-search server
+    ```

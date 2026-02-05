@@ -1,0 +1,28 @@
+# Ignore documents
+*.pdf
+*.djvu
+*.epub
+*.mobi
+*.zip
+*.rar
+*.txt
+
+# Ignore system/IDE files
+.DS_Store
+.idea/
+.vscode/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore Project specific data
+.metadata_cache/
+library.json
+indexing_failures.json
+.gemini_local_memory.json
+server.log
+
+# Keep requirements.txt but ignore other txts above (re-include if needed, but the rule above ignores all txt)
+!requirements.txt
+# If there are other essential text files, unignore them here.

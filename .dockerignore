@@ -1,0 +1,36 @@
+# Ignore large library directories
+AppliedMathematics/
+ForAshwin/
+FromDaddy/
+informationTheory/
+MakeUseOf/
+MaterialsScience/
+mathematics/
+MirPublishers/
+misc/
+nonTechnical/
+papers/
+notes/
+Physics/
+PhysicsAndEngg/
+physicsComplete/
+programmingAndCS/
+schaums/
+SpringerBooks/
+spirituality/
+templates/
+
+# Ignore local database and caches
+.metadata_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.db
+library.json
+indexing_failures.json
+server.log
+
+# Ignore git and gemini memory
+.git/
+.gemini_local_memory.json
