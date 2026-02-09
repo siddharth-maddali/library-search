@@ -23,6 +23,9 @@ indexing_failures.json
 .gemini_local_memory.json
 server.log
 
+# Ignore large library directories
+Collection_1/
+Collection_2/
+
 # Keep requirements.txt but ignore other txts above (re-include if needed, but the rule above ignores all txt)
 !requirements.txt
-# If there are other essential text files, unignore them here.

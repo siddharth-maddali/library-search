@@ -1,7 +1,30 @@
+
 # Scientific Library Search
+
+**Table of Contents**
+
+- [License](#license)
+- [Changelog](#changelog)
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Indexing Your Library](#indexing-your-library)
+  - [Running the Server](#running-the-server)
+- [Docker Setup](#docker-setup)
+  - [Build the image](#build-the-image)
+  - [Run the Indexer](#run-the-indexer)
+  - [Run the Server](#run-the-server)
+
+## License
+[Distributed under the GPL License. See `LICENSE` for more information.](LICENSE)
+
 
 ## Changelog
 
+- **2026-02-05**: 
+    - Updated search frontend header to "Personal library search".
 - **2026-02-04**: 
     - Enhanced filename parsing to robustly extract publication years (1700-2099) and editions (e.g., "2nd Ed") from filenames.
     - Updated Search UI to support filtering by year (`year:1948`) and displaying edition information.
@@ -12,7 +35,7 @@
     - Added incremental indexing with caching and parallel processing support.
     - Added Docker support for easy deployment (optimized for Raspberry Pi 4).
 
-## Abstract
+## Introduction
 
 **Scientific Library Search** is a lightweight, self-hosted search engine designed for personal document collections. Unlike traditional full-text search engines that require resource-intensive OCR, this project leverages smart filename parsing and **Wikipedia expansion**.
 
