@@ -23,6 +23,7 @@ def get_file_hash(filepath):
 
 def index_single_file(task_tuple):
     filepath, full_mode = task_tuple
+    filepath = os.path.relpath(filepath)
     print(f"Indexing {filepath} ...")
     
     file_hash = get_file_hash(filepath)
@@ -70,7 +71,7 @@ def run_indexer(dry_run=False, full_mode=False, cores=1):
         for file in files:
             ext = os.path.splitext(file)[1].lower()
             if ext in EXTS:
-                filepath = os.path.join(root, file)
+                filepath = os.path.relpath(os.path.join(root, file))
                 # Use path + hash for cache key
                 file_hash = get_file_hash(filepath)
                 if not file_hash: continue

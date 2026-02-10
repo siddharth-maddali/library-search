@@ -123,7 +123,7 @@ def extract_metadata(filepath):
         "year_edition": "",
         "type": "Unknown",
         "search_tokens": [],
-        "path": filepath,
+        "path": os.path.relpath(filepath),
         "filename": filename
     }
 

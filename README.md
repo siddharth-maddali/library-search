@@ -23,6 +23,9 @@
 
 ## Changelog
 
+- **2026-02-09**: 
+    - Standardized all document paths to be relative to the project root.
+    - Updated `library_indexer.py` and `incremental_indexer.py` to use `os.path.relpath` for metadata, caching, and database storage.
 - **2026-02-05**: 
     - Updated search frontend header to "Personal library search".
 - **2026-02-04**: 
