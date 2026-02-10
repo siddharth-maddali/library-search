@@ -14,8 +14,10 @@
   - [Running the Server](#running-the-server)
 - [Docker Setup](#docker-setup)
   - [Build the image](#build-the-image)
-  - [Run the Indexer](#run-the-indexer)
+  - [Run the Indexer (All)](#run-the-indexer-all)
   - [Run the Server](#run-the-server)
+  - [Dry Run](#dry-run)
+  - [Clean](#clean)
 
 ## License
 [Distributed under the GPL License. See `LICENSE` for more information.](LICENSE)
@@ -23,6 +25,9 @@
 
 ## Changelog
 
+- **2026-02-10**: 
+    - Added favicon to the search frontend and configured `app.py` to serve it.
+    - Added Docker commands for `all`, `dryrun`, and `clean` to the documentation.
 - **2026-02-09**: 
     - Standardized all document paths to be relative to the project root.
     - Updated `library_indexer.py` and `incremental_indexer.py` to use `os.path.relpath` for metadata, caching, and database storage.
@@ -99,7 +104,7 @@ You can run the entire stack using Docker, which is recommended for deployment (
     docker build -t library-search .
     ```
 
-2.  **Run the Indexer:**
+2.  **Run the Indexer (All):**
     Mount your current directory (`$(pwd)`) to `/app` so the container can see your files and write the `library.json` back to your host.
     ```bash
     docker run -v $(pwd):/app library-search index --cores 4
@@ -108,4 +113,16 @@ You can run the entire stack using Docker, which is recommended for deployment (
 3.  **Run the Server:**
     ```bash
     docker run -p 5000:5000 -v $(pwd):/app library-search server
+    ```
+
+4.  **Dry Run:**
+    Simulate the indexing process without writing any changes:
+    ```bash
+    docker run -v $(pwd):/app library-search index --dry-run
+    ```
+
+5.  **Clean:**
+    Remove the metadata cache and the generated library database:
+    ```bash
+    docker run -v $(pwd):/app library-search rm -rf .metadata_cache library.json
     ```
