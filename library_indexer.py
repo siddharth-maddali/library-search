@@ -186,7 +186,8 @@ def extract_metadata(filepath):
                 break
 
     # e.g. Type determination from filename/extension (approximation)
-    if filepath.lower().endswith(".pdf") or filepath.lower().endswith(".djvu"):
+    filename_lower = filepath.lower()
+    if ".pdf" in filename_lower or ".djvu" in filename_lower or ".djv" in filename_lower:
         # Heuristic: assume books unless keywords suggest otherwise
         metadata["type"] = "Book"
 
@@ -204,12 +205,13 @@ def extract_metadata(filepath):
     seeds = sorted(list(set(seeds)))
     metadata["search_tokens"].extend(seeds)
 
-    # 3. Extract tokens from TOC (for PDFs)
-    if filepath.lower().endswith(".pdf"):
-        sys.stderr.write("Extracting TOC tokens...\n")
+    # 3. Extract tokens from TOC (for PDFs and DJVUs)
+    filename_lower = filepath.lower()
+    if ".pdf" in filename_lower or ".djvu" in filename_lower or ".djv" in filename_lower:
+        sys.stderr.write(f"Extracting content tokens from {os.path.basename(filepath)}...\n")
         toc_tokens = extract_tokens_from_toc(filepath)
         if toc_tokens:
-            sys.stderr.write(f"  Found {len(toc_tokens)} tokens from TOC.\n")
+            sys.stderr.write(f"  Found {len(toc_tokens)} tokens from content.\n")
             metadata["search_tokens"].extend(toc_tokens)
 
     # 4. Wikipedia Expansion

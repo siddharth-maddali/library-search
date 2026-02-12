@@ -69,8 +69,14 @@ def run_indexer(dry_run=False, full_mode=False, cores=1):
             continue
             
         for file in files:
-            ext = os.path.splitext(file)[1].lower()
-            if ext in EXTS:
+            file_lower = file.lower()
+            is_valid_ext = False
+            for ext in EXTS:
+                if ext in file_lower:
+                    is_valid_ext = True
+                    break
+            
+            if is_valid_ext:
                 filepath = os.path.relpath(os.path.join(root, file))
                 # Use path + hash for cache key
                 file_hash = get_file_hash(filepath)

@@ -1,4 +1,3 @@
-
 # Scientific Library Search
 
 **Table of Contents**
@@ -9,15 +8,15 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-- [Usage](#usage)
-  - [Indexing Your Library](#indexing-your-library)
-  - [Running the Server](#running-the-server)
-- [Docker Setup](#docker-setup)
+- [Usage (Docker)](#usage-docker)
   - [Build the image](#build-the-image)
   - [Run the Indexer (All)](#run-the-indexer-all)
   - [Run the Server](#run-the-server)
   - [Dry Run](#dry-run)
   - [Clean](#clean)
+- [Usage (non-Docker)](#usage-non-docker)
+  - [Indexing Your Library](#indexing-your-library)
+  - [Running the Server](#running-the-server)
 
 ## License
 [Distributed under the GPL License. See `LICENSE` for more information.](LICENSE)
@@ -25,6 +24,12 @@
 
 ## Changelog
 
+- **2026-02-12**:
+    - Augmented indexing strategy with content-based parsing (TOC, Abstract, and Introduction).
+    - Added OCR fallback using Tesseract for scanned PDF documents (first 25 pages).
+    - Integrated DJVU text extraction support via `djvutxt`.
+    - Enhanced file discovery to support numerical suffixes (e.g., `.pdf.1`).
+    - Combined glossary matching with NLTK-based noun-phrase extraction for more thorough technical token discovery.
 - **2026-02-10**: 
     - Added favicon to the search frontend and configured `app.py` to serve it.
     - Added Docker commands for `all`, `dryrun`, and `clean` to the documentation.
@@ -47,7 +52,7 @@
 
 **Scientific Library Search** is a lightweight, self-hosted search engine designed for personal document collections. Unlike traditional full-text search engines that require resource-intensive OCR, this project leverages smart filename parsing and **Wikipedia expansion**.
 
-It extracts metadata (Author, Title, Year, Edition) from filenames and uses a local glossary to identify technical terms. It then queries Wikipedia for these terms to fetch related keywords, creating a rich search index without reading the file contents. This makes it extremely fast and robust, especially for older scientific papers or scanned books with poor text layers.
+It extracts metadata (Author, Title, Year, Edition) from filenames and identifies technical terms using a local glossary. Furthermore, it now parses the **document content** (TOC, Abstracts) and employs **OCR fallback** for scanned documents. It can also query Wikipedia for identified terms to fetch related keywords, creating a rich search index. This hybrid approach ensures high speed while providing thorough discoverability even for documents without text layers.
 
 Supported formats: PDF, DJVU, EPUB, MOBI.
 
@@ -71,31 +76,7 @@ Supported formats: PDF, DJVU, EPUB, MOBI.
     pip install -r requirements.txt
     ```
 
-### Usage
-
-#### 1. Indexing Your Library
-
-To build the search index (`library.json`), run:
-
-```bash
-make index
-```
-
-This will scan the current directory (and subdirectories) for supported files.
-- Use `--cores N` to run in parallel (e.g., `python3 incremental_indexer.py --cores 4`).
-- Use `--full` to enable Wikipedia expansion (requires internet connection).
-
-#### 2. Running the Server
-
-Start the web interface:
-
-```bash
-make server
-```
-
-The UI will be available at `http://localhost:5000`.
-
-### Docker Setup
+## Usage (Docker)
 
 You can run the entire stack using Docker, which is recommended for deployment (e.g., on a Raspberry Pi).
 
@@ -110,19 +91,49 @@ You can run the entire stack using Docker, which is recommended for deployment (
     docker run -v $(pwd):/app library-search index --cores 4
     ```
 
-3.  **Run the Server:**
+3.  **Run the Full Indexer (with Wikipedia):**
+    ```bash
+    docker run -v $(pwd):/app library-search full-index
+    ```
+
+4.  **Run the Server:**
     ```bash
     docker run -p 5000:5000 -v $(pwd):/app library-search server
     ```
+    The UI will be available at `http://localhost:5000`.
 
-4.  **Dry Run:**
+5.  **Dry Run:**
     Simulate the indexing process without writing any changes:
     ```bash
-    docker run -v $(pwd):/app library-search index --dry-run
+    docker run -v $(pwd):/app library-search dryrun
     ```
 
-5.  **Clean:**
+6.  **Clean:**
     Remove the metadata cache and the generated library database:
     ```bash
-    docker run -v $(pwd):/app library-search rm -rf .metadata_cache library.json
+    docker run -v $(pwd):/app library-search clean
     ```
+
+## Usage (non-Docker)
+
+### Indexing Your Library
+
+To build the search index (`library.json`), run:
+
+```bash
+make index
+```
+
+This will scan the current directory (and subdirectories) for supported files.
+- Use `--cores N` to run in parallel (e.g., `python3 incremental_indexer.py --cores 4`).
+- Use `--full` to enable Wikipedia expansion (requires internet connection).
+
+### Running the Server
+
+Start the web interface:
+
+```bash
+make server
+```
+
+The UI will be available at `http://localhost:5000`.
